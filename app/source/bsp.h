@@ -34,8 +34,6 @@ extern "C" {
 #include "bsp_io_11.h"
 
 /* Public defines ----------------------------------------------------- */
-#define TEMPERATURE_BOARD
-
 /* Public enumerate/structure ----------------------------------------- */
 /**
  * @brief Base status structure
