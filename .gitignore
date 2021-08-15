@@ -3,6 +3,7 @@
 
 # Object files
 *.o
+*.crf
 *.ko
 *.obj
 *.elf
@@ -34,7 +35,7 @@
 *.app
 *.i*86
 *.x86_64
-*.hex
+# *.hex
 
 # Debug files
 *.dSYM/
@@ -50,3 +51,67 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+# Adding by ThuanLe
+# Compiled Object files
+*.slo
+*.lo
+*.obj
+*.crf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.map
+*.lst
+
+# Executables
+*.exe
+*.out
+*.app
+*.htm
+*.axf
+*crf
+
+
+Objects
+
+*uvguix*
+
+*.axf
+*.htm
+*.Inp
+*.map
+*.tra
+*.dep
+*.__i
+*.crf
+*.d
+*.o
+*.lst
+*.lnp
+*.bak
+*.Vishwas
+*.bin
+*.fed
+*._2i
+*.l1p
+*.l2p
+*.iex
+_build
+
+nrf52832_xxaa.axf
