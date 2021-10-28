@@ -148,10 +148,13 @@ static bsp_lcd_t ITEMS_TABLE[] =
 static void m_bsp_lcd_address_set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 static void m_bsp_lcd_write_pixel(uint16_t x, uint16_t y, uint16_t thin, uint16_t color);
 static void m_bsp_lcd_draw_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, const short unsigned A[]);
-static void m_bsp_lcd_fill_square(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 static void m_bsp_lcd_write_char(uint16_t x, uint16_t y, unsigned c, uint16_t color, uint16_t bg, uint8_t size);
 
 static void m_bsp_lcd_display_spo2_progress(uint8_t spo2);
+
+#if (0)
+static void m_bsp_lcd_fill_square(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
+#endif
 
 /* Function definitions ----------------------------------------------- */
 void bsp_lcd_init(void)
@@ -254,7 +257,7 @@ void bsp_lcd_temp_display_number(bsp_lcd_item_t item, float num)
   bsp_lcd_img_t *TABLE;
 
   // Rounding data
-  num = num + 0.05;
+  num = num + (float)0.05;
 
   hundreds = (num / 100);
   dozens   = ((uint8_t)num % 100) / 10;
@@ -550,6 +553,7 @@ static void m_bsp_lcd_draw_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t
  *
  * @return        None
  */
+#if(0)
 static void m_bsp_lcd_fill_square(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color)
 {
   m_bsp_lcd_address_set(x1, y1, x2 - 1, y2 - 1);
@@ -564,6 +568,7 @@ static void m_bsp_lcd_fill_square(uint16_t x1, uint16_t y1, uint16_t x2, uint16_
     }
   }
 }
+#endif
 
 /**
  * @brief         LCD write char
