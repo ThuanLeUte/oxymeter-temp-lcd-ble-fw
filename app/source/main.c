@@ -184,7 +184,12 @@ int main(void)
 void sys_po_blood_oxygen_notify(uint8_t blood_oxygen)
 {
   ret_code_t err_code;
+  static uint8_t last_blood_oxigen = 0;
 
+  if (blood_oxygen == last_blood_oxigen)
+    return;
+
+  last_blood_oxigen = blood_oxygen;
   bsp_lcd_display_spo2_number(blood_oxygen);
 
   err_code = ble_bos_blood_oxygen_update(&m_bos, blood_oxygen, BLE_CONN_HANDLE_ALL);
@@ -201,7 +206,12 @@ void sys_po_blood_oxygen_notify(uint8_t blood_oxygen)
 void sys_po_heart_rate_notify(uint8_t heart_rate)
 {
   ret_code_t err_code;
+  static uint8_t last_heart_rate = 0;
 
+  if (heart_rate == last_heart_rate)
+    return;
+  
+  last_heart_rate = heart_rate;
   bsp_lcd_display_heartrate_number(heart_rate);
 
   err_code = ble_hrns_heart_rate_update(&m_hrns, heart_rate, BLE_CONN_HANDLE_ALL);
@@ -1032,18 +1042,22 @@ static void body_temp_update(void)
 
   ret_code_t err_code;
   float human_body_temp = 0;
+  static float last_human_body_temp = 0;
 
   sys_temp_get(&human_body_temp);
 
+  if (human_body_temp == last_human_body_temp)
+    return;
+
+  last_human_body_temp = human_body_temp;
+  
   if (m_is_big_num_celsius)
   {
-    bsp_lcd_temp_display_celsius_big_num(true);
     bsp_lcd_display_big_temp_number(human_body_temp);
     bsp_lcd_display_small_temp_number(C_TO_F(human_body_temp));
   }
   else
   {
-    bsp_lcd_temp_display_celsius_big_num(false);
     bsp_lcd_display_big_temp_number(C_TO_F(human_body_temp));
     bsp_lcd_display_small_temp_number(human_body_temp);
   }
@@ -1065,7 +1079,10 @@ void bsp_intr_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 {
   NRF_LOG_INFO( "Button is pressed");
   m_is_big_num_celsius = !m_is_big_num_celsius;
+
   body_temp_update();
+
+  bsp_lcd_temp_display_celsius_big_num(m_is_big_num_celsius);
 }
 
 /**

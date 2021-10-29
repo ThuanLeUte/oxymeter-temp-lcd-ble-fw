@@ -129,8 +129,8 @@ static bsp_lcd_t ITEMS_TABLE[] =
     ,ITEM_INFO(LCD_BATT_0          ,    107,    215,    24,    15, batt_0     )
     ,ITEM_INFO(LCD_DOT             ,      0,      0,     9,     9, dot        )
     ,ITEM_INFO(LCD_DOT_N           ,      0,      0,     9,     9, dot_n      )
-    ,ITEM_INFO(LCD_BIG_DOT         ,      0,      0,    10,     9, big_dot    )
-    ,ITEM_INFO(LCD_SMALL_DOT       ,      0,      0,     5,     5, small_dot  )
+    ,ITEM_INFO(LCD_BIG_DOT         ,      0,     33,    10,     9, big_dot    )
+    ,ITEM_INFO(LCD_SMALL_DOT       ,      0,     15,     5,     5, small_dot  )
     ,ITEM_INFO(LCD_BIG_C           ,    160,     85,    34,    27, big_c      )
     ,ITEM_INFO(LCD_BIG_F           ,    160,     85,    34,    27, big_f      )
     ,ITEM_INFO(LCD_BIG_C_F_N       ,    160,     85,    34,    27, big_c_f_n  )
@@ -317,8 +317,8 @@ void bsp_lcd_temp_display_number(bsp_lcd_item_t item, float num)
   x_current_position = x_px;
   x_px = x_current_position + ITEMS_TABLE[dot].img.x_px;
 
-  m_bsp_lcd_draw_image(x_current_position, y_current_position,
-                       x_px, y_current_position + ITEMS_TABLE[dot].img.y_px, ITEMS_TABLE[dot].img.data);
+  m_bsp_lcd_draw_image(x_current_position, y_current_position + ITEMS_TABLE[dot].y_pos,
+                       x_px, y_current_position + ITEMS_TABLE[dot].y_pos + ITEMS_TABLE[dot].img.y_px, ITEMS_TABLE[dot].img.data);
 
   // Get current position and pixcel for decimal
   x_current_position = x_px;
