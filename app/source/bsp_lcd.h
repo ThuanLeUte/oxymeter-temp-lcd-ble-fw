@@ -105,6 +105,8 @@ void bsp_lcd_temp_display_number(bsp_lcd_item_t item, float num);
 #define bsp_lcd_display_small_temp_number(num) bsp_lcd_temp_display_number(LCD_TEMP_SMALL_NUM , num)
 
 void bsp_lcd_temp_display_celsius_big_num(bool enable);
+void bsp_lcd_display_spo2_progress(uint8_t spo2);
+void bsp_lcd_display_temp_progress(uint8_t temp);
 
 /* Public function basic --------------------------------------------- */
 /**

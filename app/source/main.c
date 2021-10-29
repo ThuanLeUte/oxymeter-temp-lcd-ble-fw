@@ -1062,6 +1062,8 @@ static void body_temp_update(void)
     bsp_lcd_display_small_temp_number(human_body_temp);
   }
 
+  bsp_lcd_display_temp_progress((uint8_t)C_TO_F(human_body_temp));
+
   NRF_LOG_INFO( "Temperature: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(human_body_temp));
 
   err_code = ble_bts_body_temp_update(&m_bts, human_body_temp, BLE_CONN_HANDLE_ALL);

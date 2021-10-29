@@ -150,8 +150,6 @@ static void m_bsp_lcd_write_pixel(uint16_t x, uint16_t y, uint16_t thin, uint16_
 static void m_bsp_lcd_draw_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, const short unsigned A[]);
 static void m_bsp_lcd_write_char(uint16_t x, uint16_t y, unsigned c, uint16_t color, uint16_t bg, uint8_t size);
 
-static void m_bsp_lcd_display_spo2_progress(uint8_t spo2);
-
 #if (0)
 static void m_bsp_lcd_fill_square(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 #endif
@@ -211,10 +209,12 @@ void bsp_lcd_spo2_display_number(bsp_lcd_item_t item, uint8_t num)
   if (item == LCD_SP02_NUM)
   {
     TABLE = BIG_NUM_TABLE;
-    m_bsp_lcd_display_spo2_progress(num);
+    bsp_lcd_display_spo2_progress(num);
   }
   else if (LCD_HEART_RATE_NUM)
+  {
     TABLE = SMALL_NUM_TABLE;
+  }
 
   // Get position at first item
   x_current_position = ITEMS_TABLE[item].x_pos;
@@ -263,11 +263,6 @@ void bsp_lcd_temp_display_number(bsp_lcd_item_t item, float num)
   dozens   = ((uint8_t)num % 100) / 10;
   units    = ((uint8_t)num % 100) % 10;
   decimal  = (num - (uint8_t)num) * 10;
-
-  NRF_LOG_INFO( "hundreds: %d", hundreds);
-  NRF_LOG_INFO( "dozens: %d", dozens);
-  NRF_LOG_INFO( "dozens: %d", dozens);
-  NRF_LOG_INFO( "decimal: %d", decimal);
 
   if (item == LCD_TEMP_BIG_NUM)
   {
@@ -399,7 +394,7 @@ void bsp_lcd_write_string(uint16_t x, uint16_t y, const char c[],
  *
  * @return        None
  */
-static void m_bsp_lcd_display_spo2_progress(uint8_t spo2)
+void bsp_lcd_display_spo2_progress(uint8_t spo2)
 {
   static uint16_t x_pos, y_pos;
   double degree;
@@ -434,6 +429,67 @@ static void m_bsp_lcd_display_spo2_progress(uint8_t spo2)
   {
     spo2   = spo2 - 94;
     degree = 56 - (double)(spo2 * 16);
+  }
+
+  // (a, b) is the cicle center position (116, -116)
+  // x = a + r * cos(t)
+  // y = b + r * sin(t)
+  // Calculate position depend on the degree on the circle
+  val   = PI / 180.0;
+  x_pos = 116 + 103 * cos(degree * val);
+  y_pos = abs((int)(-116 + 103 * sin(degree * val)));
+
+  // Display current position
+  m_bsp_lcd_draw_image(x_pos, y_pos,
+                       ITEMS_TABLE[LCD_DOT].img.x_px + x_pos,
+                       ITEMS_TABLE[LCD_DOT].img.y_px + y_pos,
+                       ITEMS_TABLE[LCD_DOT].img.data);
+}
+
+/**
+ * @brief         LCD display temperature progress
+ *
+ * @param[in]     temp  Temperature value
+ *
+ * @attention     None
+ *
+ * @return        None
+ */
+void bsp_lcd_display_temp_progress(uint8_t temp)
+{
+  static uint16_t x_pos, y_pos;
+  double degree;
+  double val;
+
+  // Value 0  -> 97  -> Circle blue
+  // Deg 220  -> 80 -> Degrees per value: 1.44
+
+  // Value 97 -> 99  -> Circle orage
+  // Deg 80  -> 56  -> Degrees per value: 12
+
+  // Value 99 -> 110 -> Circle red
+  // Deg 56   -> -40 -> Degrees per value: 8.72
+
+  // Remove previous position
+  m_bsp_lcd_draw_image(x_pos, y_pos,
+                       ITEMS_TABLE[LCD_DOT_N].img.x_px + x_pos,
+                       ITEMS_TABLE[LCD_DOT_N].img.y_px + y_pos,
+                       ITEMS_TABLE[LCD_DOT_N].img.data);
+
+  // Get degree of the value on the circle
+  if (temp <= 97)
+  {
+    degree = 220.0 - (double)(temp * 1.44);
+  }
+  else if (temp > 97 && temp <= 99)
+  {
+    temp   = temp - 97;
+    degree = 80 - (double)(temp * 12);
+  }
+  else
+  {
+    temp   = temp - 99;
+    degree = 56 - (double)(temp * 8.72);
   }
 
   // (a, b) is the cicle center position (116, -116)
