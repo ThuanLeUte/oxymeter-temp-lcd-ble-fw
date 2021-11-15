@@ -120,7 +120,8 @@ static bsp_lcd_t ITEMS_TABLE[] =
   //          +====================+=======+=======+======+======+============+
   //          |ITEMS               | X-Pos | Y-Pos | X-Px | Y-Px | Data       |
   //          +--------------------+-------+-------+------+------+------------+
-     ITEM_INFO(LCD_SPO2_BG         ,      0,      0,   240,   240, spo2_bg    )
+     ITEM_INFO(LCD_FIRST_LOGO      ,      0,      0,   240,   240, first_log  )
+    ,ITEM_INFO(LCD_SPO2_BG         ,      0,      0,   240,   240, spo2_bg    )
     ,ITEM_INFO(LCD_TEMP_BG         ,      0,      0,   240,   240, temp_bg    )
     ,ITEM_INFO(LCD_BATT_FULL       ,    107,    215,    24,    15, batt_full  )
     ,ITEM_INFO(LCD_BATT_75         ,    107,    215,    24,    15, batt_75    )
@@ -162,6 +163,11 @@ void bsp_lcd_init(void)
   m_gc9a01.spi_send   = bsp_spi_write;
 
   gc9a01_init(&m_gc9a01);
+
+  // Draw logo picture
+  bsp_lcd_display_image(LCD_FIRST_LOGO);
+
+  bsp_delay_ms(1500);
 
 #ifdef TEMPERATURE_BOARD
   // Draw background image

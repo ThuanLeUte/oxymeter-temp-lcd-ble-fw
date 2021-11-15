@@ -25,7 +25,8 @@ extern "C" {
 /* Public enumerate/structure ----------------------------------------- */
 typedef enum
 {
-   LCD_SPO2_BG
+   LCD_FIRST_LOGO
+  ,LCD_SPO2_BG
   ,LCD_TEMP_BG
   ,LCD_BATT_FULL
   ,LCD_BATT_75
